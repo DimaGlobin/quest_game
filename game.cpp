@@ -39,11 +39,9 @@ _target_item(target_item) {}
 
 void build_game::start() {
 
-    int room_counter = 0;
     int flag = 0;
     std::stack<room*>rooms_order;
     room* cur_room = rooms[0];
-    // rooms_order.push(cur_room);
 
     while(1) {
 
@@ -94,12 +92,6 @@ void build_game::start() {
 
         }
 
-        else if (type_of_action == "deactivation") {
-
-            if (room_counter == 0) cout << "No way\n";
-            else room_counter--;
-        }
-
         else if (type_of_action == "empty") {
 
         }
@@ -137,5 +129,5 @@ void build_game::start() {
 
     }
 
-    cout << "THE END. If you want to play again type \"./KR\" in console.\n";
+    cout << "THE END. If you want to play again, type \"./KR\" in console.\n";
 }

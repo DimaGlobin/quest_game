@@ -97,12 +97,6 @@ class movement : public action {
     movement(std::string description, room* target_room) : action("movement", description, target_room, nullptr){};
 };
 
-class deactivation : public action {
-
-    public:
-    deactivation(std::string description, item* target_item) : action("deactivation", description, nullptr, target_item){};
-};
-
 class go_back : public action {
 
     public:
