@@ -1,3 +1,6 @@
+#include <stack>
+#include <cassert>
+
 #include "game.h"
 
 using std::cout;
@@ -38,12 +41,13 @@ void build_game::start() {
 
     int room_counter = 0;
     int flag = 0;
+    std::stack<room*>rooms_order;
+    room* cur_room = rooms[0];
+    // rooms_order.push(cur_room);
 
-    while(room_counter < rooms.size()) {
+    while(1) {
 
-        room* cur_room = rooms[room_counter];
-
-        if (flag == 0) cout << cur_room -> description << endl;
+        if (flag == 0) cout << "\n" << cur_room -> description << "\n\n";
 
         flag = 1;
 
@@ -74,13 +78,18 @@ void build_game::start() {
 
         if (type_of_action == "movement") {
 
-            room_counter++;
+            rooms_order.push(cur_room);
+            cur_room = cur_action -> _target_room;
             flag = 0;
         }
 
         else if (type_of_action == "interaction") {
 
-            cout << endl << cur_action -> _target_item -> action_desc << "\n\n";
+            item* tar_item = cur_action -> _target_item;
+
+            assert(tar_item != nullptr);
+
+            cout << endl << tar_item -> action_desc << "\n\n";
             cur_room -> actions.erase(cur_room -> actions.begin() + var_number - 1);
 
         }
@@ -97,13 +106,36 @@ void build_game::start() {
 
         else if (type_of_action == "go_back") {
 
-            if (room_counter <= 0) cout << "No way. You are in the begining\n\n";
+            if (rooms_order.size() == 0) cout << "No way. You are in the begining\n\n";
+            
             else {
 
-                room_counter--;
+                cur_room = rooms_order.top();
+                rooms_order.pop();
+
                 flag = 0;
             }
         }
 
+        else if (type_of_action == "winning_action") {
+
+            cout << "---------------------------------\n\n\n" << "!!!YOU WON!!!\n THE END!\n\n\n" << "---------------------------------\n\n\n";
+            break;
+        }
+
+        else if (type_of_action == "killing_action") {
+
+            item* tar_item = cur_action -> _target_item;
+
+            assert(tar_item != nullptr);
+
+            cout << endl << tar_item -> action_desc << "\n\n";
+            cout << "---------------------------------\n\n\n" << "WASTED\n\n\n" << "---------------------------------\n\n\n";
+        
+            break;
+        }
+
     }
+
+    cout << "THE END. If you want to play again type \"./KR\" in console.\n";
 }

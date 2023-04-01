@@ -27,12 +27,13 @@ class build_game {
 
 /*
 available types of actions:
-
     1) movement
     2) interaction
     3) empty
     4) deactivation
     5) go_back
+    6) killing_action
+    7) winning_action
 */
 
 class room {
@@ -108,4 +109,18 @@ class go_back : public action {
 
     go_back(std::string description) : action("go_back", description, nullptr, nullptr){};
 
+};
+
+class winning_action : public action {
+
+    public:
+
+    winning_action(std::string description) : action("winning_action", description, nullptr, nullptr){};
+};
+
+class killing_action : public action {
+
+    public:
+
+    killing_action(std::string description, item* target_item) : action("killing_action", description, nullptr, target_item){};
 };
