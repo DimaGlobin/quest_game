@@ -1,11 +1,18 @@
 #include <stack>
 #include <cassert>
+#include <algorithm>
 
 #include "game.h"
 
 using std::cout;
 using std::cin;
 using std::endl;
+
+bool is_number(const std::string& s)
+{
+    return !s.empty() && std::find_if(s.begin(), 
+        s.end(), [](unsigned char c) { return !std::isdigit(c); }) == s.end();
+}
 
 build_game::build_game() : rooms() {}
 
@@ -66,13 +73,30 @@ void build_game::start() {
             cout << i + 1 << ") " <<  cur_room -> actions[i] -> _description << endl;
         }
 
-        int var_number;
+        std::string var_number;
+        int int_var_number;
 
-        if (size_of_actions > 1)  cin >> var_number;
-        else var_number = 1;
+        if (size_of_actions > 1)  {
+            
+            cin >> var_number;
 
-        string type_of_action = cur_room -> actions[var_number - 1]->_type_of_action;
-        action* cur_action = cur_room -> actions[var_number - 1];
+            if (!is_number(var_number)) {
+
+                while(!is_number(var_number)) {
+
+                    cout << "Wrong format for variant. Try again.\n";
+                    cin >> var_number;
+                }
+
+            }
+
+            int_var_number = std::atoi(var_number.c_str());
+        }
+
+        else int_var_number = 1;
+
+        string type_of_action = cur_room -> actions[int_var_number - 1]->_type_of_action;
+        action* cur_action = cur_room -> actions[int_var_number - 1];
 
         if (type_of_action == "movement") {
 
@@ -88,7 +112,7 @@ void build_game::start() {
             assert(tar_item != nullptr);
 
             cout << endl << tar_item -> action_desc << "\n\n";
-            cur_room -> actions.erase(cur_room -> actions.begin() + var_number - 1);
+            cur_room -> actions.erase(cur_room -> actions.begin() + int_var_number - 1);
 
         }
 
